@@ -55,6 +55,14 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
         setContentView(R.layout.view_round_bottom)
         window?.decorView?.setBackgroundResource(android.R.color.transparent)
 
+        setOnCancelListener {
+            dialog = null
+        }
+
+        setOnDismissListener {
+            dialog = null
+        }
+
         tvTitle = findViewById(R.id.tvTitle)
         tvTitle?.text = title
 

@@ -22,6 +22,9 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
     companion object {
         @SuppressLint("StaticFieldLeak")
         private var dialog: RoundBottomView? = null
+        var canClose = false
+        var closeListener: () -> Unit = {  }
+
         fun show(context: Context, title: String, contentLayout: Int, process: (contentLayout: View?) -> Unit) {
             if (dialog == null) {
                 dialog = RoundBottomView(context, R.style.Animation_Design_BottomSheetDialog)
@@ -55,20 +58,25 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
         setContentView(R.layout.view_round_bottom)
         window?.decorView?.setBackgroundResource(android.R.color.transparent)
 
+
+
         setOnCancelListener {
             dialog = null
         }
 
         setOnDismissListener {
+            closeListener()
             dialog = null
         }
 
         tvTitle = findViewById(R.id.tvTitle)
         tvTitle?.text = title
 
-        findViewById<View>(R.id.ivClose).setOnClickListener {
+        val ivClose = findViewById<View>(R.id.ivClose)
+        ivClose.setOnClickListener {
             close()
         }
+        ivClose.visibility = if (canClose) View.VISIBLE else View.INVISIBLE
 
         if (contentLayoutResId != 0) {
             val clContent = findViewById<View>(R.id.clContent)

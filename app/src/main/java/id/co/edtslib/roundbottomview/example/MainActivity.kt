@@ -11,6 +11,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         findViewById<View>(R.id.textView).setOnClickListener {
+            RoundBottomView.canClose = false
             RoundBottomView.show(this, "Title", R.layout.view_dialog_content) {
                 it?.findViewById<View>(R.id.textView)?.setOnClickListener {
                     Toast.makeText(this, "Hi", Toast.LENGTH_SHORT).show()

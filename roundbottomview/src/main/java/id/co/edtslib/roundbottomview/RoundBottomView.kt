@@ -22,7 +22,7 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
     companion object {
         @SuppressLint("StaticFieldLeak")
         private var dialog: RoundBottomView? = null
-        var canClose = false
+        var canClose = true
         var closeListener: () -> Unit = {  }
 
         fun show(context: Context, title: String, contentLayout: Int, process: (contentLayout: View?) -> Unit) {

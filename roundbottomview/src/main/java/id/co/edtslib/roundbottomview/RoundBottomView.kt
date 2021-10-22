@@ -35,7 +35,7 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
         }
 
         fun close() {
-            dialog?.dismiss()
+            dialog?.cancel()
             dialog = null
         }
 
@@ -51,14 +51,10 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        super.onCreate(savedInstanceState)
-
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         setContentView(R.layout.view_round_bottom)
         window?.decorView?.setBackgroundResource(android.R.color.transparent)
-
-
 
         setOnCancelListener {
             dialog = null
@@ -90,7 +86,7 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
 
             val clDialog = findViewById<View>(R.id.clDialog)
             clDialog.setOnClickListener {
-                dismiss()
+                close()
             }
 
             flContent.post {

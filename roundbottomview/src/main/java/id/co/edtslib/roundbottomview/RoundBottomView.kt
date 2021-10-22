@@ -34,9 +34,19 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
             }
         }
 
-        fun close() {
-            dialog?.cancel()
+        fun close(executeOnClose: Boolean) {
+            if (executeOnClose) {
+                dialog?.dismiss()
+            }
+            else {
+                dialog?.cancel()
+            }
+
             dialog = null
+        }
+
+        fun close() {
+            close(true)
         }
 
         fun setTitleStyle(style: Int) {
@@ -55,6 +65,8 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
 
         setContentView(R.layout.view_round_bottom)
         window?.decorView?.setBackgroundResource(android.R.color.transparent)
+
+
 
         setOnCancelListener {
             dialog = null
@@ -86,7 +98,7 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
 
             val clDialog = findViewById<View>(R.id.clDialog)
             clDialog.setOnClickListener {
-                close()
+                dismiss()
             }
 
             flContent.post {

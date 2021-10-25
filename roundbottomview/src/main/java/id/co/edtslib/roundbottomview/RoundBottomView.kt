@@ -23,7 +23,7 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
         @SuppressLint("StaticFieldLeak")
         private var dialog: RoundBottomView? = null
         var canClose = true
-        var closeListener: () -> Unit = {  }
+        var cancelListener: () -> Unit = {  }
 
         fun show(context: Context, title: String, contentLayout: Int, process: (contentLayout: View?) -> Unit) {
             if (dialog == null) {
@@ -34,19 +34,14 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
             }
         }
 
-        fun close(executeOnClose: Boolean) {
-            if (executeOnClose) {
-                dialog?.dismiss()
-            }
-            else {
-                dialog?.cancel()
-            }
-
+        fun close() {
+            dialog?.dismiss()
             dialog = null
         }
 
-        fun close() {
-            close(true)
+        fun cancel() {
+            dialog?.cancel()
+            dialog = null
         }
 
         fun setTitleStyle(style: Int) {
@@ -70,10 +65,10 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
 
         setOnCancelListener {
             dialog = null
+            cancelListener()
         }
 
         setOnDismissListener {
-            closeListener()
             dialog = null
         }
 
@@ -82,7 +77,7 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
 
         val ivClose = findViewById<View>(R.id.ivClose)
         ivClose.setOnClickListener {
-            close()
+            RoundBottomView.cancel()
         }
         ivClose.visibility = if (canClose) View.VISIBLE else View.INVISIBLE
 
@@ -98,7 +93,7 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
 
             val clDialog = findViewById<View>(R.id.clDialog)
             clDialog.setOnClickListener {
-                dismiss()
+                RoundBottomView.cancel()
             }
 
             flContent.post {

@@ -9,6 +9,8 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
+import android.view.WindowManager
+import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.widget.TextViewCompat
@@ -21,7 +23,7 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
 
     companion object {
         @SuppressLint("StaticFieldLeak")
-        private var dialog: RoundBottomView? = null
+        var dialog: RoundBottomView? = null
         var canClose = true
         var cancelListener: () -> Unit = {  }
 
@@ -61,7 +63,7 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
         setContentView(R.layout.view_round_bottom)
         window?.decorView?.setBackgroundResource(android.R.color.transparent)
 
-
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         setOnCancelListener {
             dialog = null
@@ -84,6 +86,9 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
         if (contentLayoutResId != 0) {
             val clContent = findViewById<View>(R.id.clContent)
             clContent.visibility = View.INVISIBLE
+
+            val clDialogOpacity = findViewById<View>(R.id.clDialogOpacity)
+            fadeIn(context, clDialogOpacity)
 
             val inflater = LayoutInflater.from(context)
             val contentLayout = inflater.inflate(contentLayoutResId, null)
@@ -115,5 +120,11 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
         this.process = process
 
         super.show()
+    }
+
+    private fun fadeIn(context: Context, view: View?) {
+        view?.visibility = View.VISIBLE
+        val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+        view?.startAnimation(animation)
     }
 }

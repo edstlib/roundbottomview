@@ -29,7 +29,7 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
 
         fun show(context: Context, title: String, contentLayout: Int, process: (contentLayout: View?) -> Unit) {
             if (dialog == null) {
-                dialog = RoundBottomView(context, R.style.Animation_Design_BottomSheetDialog)
+                dialog = RoundBottomView(context, R.style.RoundBottomStyle)
                 dialog?.setCancelable(true)
                 dialog?.setCanceledOnTouchOutside(true)
                 dialog?.show(title, contentLayout, process)
@@ -63,7 +63,6 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
         setContentView(R.layout.view_round_bottom)
         window?.decorView?.setBackgroundResource(android.R.color.transparent)
 
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         setOnCancelListener {
             dialog = null

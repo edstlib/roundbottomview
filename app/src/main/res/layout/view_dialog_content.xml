@@ -4,12 +4,20 @@
     android:fitsSystemWindows="false"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="100dp"
+    android:paddingBottom="16dp"
     android:layout_gravity="center">
     <TextView
         android:id="@+id/textView"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="1000dp"
+        android:layout_height="wrap_content"
         android:text="Dialog content exapmle. Click this text" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_marginTop="16dp"
+        android:text="submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </androidx.appcompat.widget.LinearLayoutCompat>

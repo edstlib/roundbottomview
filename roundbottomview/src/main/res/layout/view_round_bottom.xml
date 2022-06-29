@@ -25,6 +25,8 @@
             android:layout_weight="1">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_gravity="bottom"
+                android:focusable="true"
+                android:clickable="true"
                 android:id="@+id/clContent"
                 android:background="@drawable/bg_round_bottom"
                 android:layout_width="match_parent"

@@ -8,18 +8,21 @@ import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.core.widget.TextViewCompat
 
 class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
     private var contentLayoutResId = 0
+    private var headerLayoutResId = 0
     private var tvTitle: TextView? = null
     private var title: String? = null
     private lateinit var process: (contentLayout: View?) -> Unit
+    private lateinit var process1: (contentLayout: View?, headerLayout: View?) -> Unit
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -27,12 +30,22 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
         var canClose = true
         var cancelListener: () -> Unit = {  }
 
-        fun show(context: Context, title: String, contentLayout: Int, process: (contentLayout: View?) -> Unit) {
+        fun show(context: Context, title: String?, contentLayout: Int, process: (contentLayout: View?) -> Unit) {
             if (dialog == null) {
                 dialog = RoundBottomView(context, R.style.RoundBottomStyle)
                 dialog?.setCancelable(true)
                 dialog?.setCanceledOnTouchOutside(true)
                 dialog?.show(title, contentLayout, process)
+            }
+        }
+
+        fun show(context: Context, title: String?, contentLayout: Int, headerLayout: Int,
+                 process: (contentLayout: View?, headerLayout: View?) -> Unit) {
+            if (dialog == null) {
+                dialog = RoundBottomView(context, R.style.RoundBottomStyle)
+                dialog?.setCancelable(true)
+                dialog?.setCanceledOnTouchOutside(true)
+                dialog?.show(title, contentLayout, headerLayout, process)
             }
         }
 
@@ -73,6 +86,9 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
             dialog = null
         }
 
+        val llTitle = findViewById<View>(R.id.llTitle)
+        llTitle.isVisible = title?.isNotEmpty() == true || canClose
+
         tvTitle = findViewById(R.id.tvTitle)
         tvTitle?.text = title
 
@@ -80,10 +96,10 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
         ivClose.setOnClickListener {
             RoundBottomView.cancel()
         }
-        ivClose.visibility = if (canClose) View.VISIBLE else View.INVISIBLE
+        ivClose.isVisible = canClose
 
         if (contentLayoutResId != 0) {
-            val clContent = findViewById<View>(R.id.clContent)
+            val clContent = findViewById<ViewGroup>(R.id.clContent)
             clContent.visibility = View.INVISIBLE
 
             val clDialogOpacity = findViewById<View>(R.id.clDialogOpacity)
@@ -91,6 +107,18 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
 
             val inflater = LayoutInflater.from(context)
             val contentLayout = inflater.inflate(contentLayoutResId, null)
+
+            val headerLayout = if (headerLayoutResId != 0) {
+                inflater.inflate(headerLayoutResId, null)
+            }
+            else {
+                null
+            }
+
+            if (headerLayout != null) {
+                clContent.removeView(llTitle)
+                clContent.addView(headerLayout)
+            }
 
             val flContent = findViewById<FrameLayout>(R.id.flContent)
             flContent.addView(contentLayout)
@@ -108,8 +136,21 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
 
             }
 
-            process(contentLayout)
+            if (headerLayout != null) {
+                process1(contentLayout, headerLayout)
+            }
+            else {
+                process(contentLayout)
+            }
+
+            clContent.postDelayed({
+                measure()
+            }, 250)
         }
+
+    }
+
+    private fun measure() {
 
     }
 
@@ -117,6 +158,15 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
         this.title = title
         this.contentLayoutResId = contentLayout
         this.process = process
+
+        super.show()
+    }
+
+    fun show(title: String?, contentLayout: Int, headerLayout: Int, process: (contentLayout: View?, headerLayout: View?) -> Unit) {
+        this.title = title
+        this.contentLayoutResId = contentLayout
+        this.headerLayoutResId = headerLayout
+        this.process1 = process
 
         super.show()
     }

@@ -133,7 +133,6 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
 
                 clContent.visibility = View.VISIBLE
                 clContent.animate()?.translationY(0f)
-
             }
 
             if (headerLayout != null) {

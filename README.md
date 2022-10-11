@@ -29,7 +29,9 @@ To show bottom view, just call static mehotd RoundBottomView.show
         contentLayout: resource id of content layout which show on bottom view
         process: process layout content, view: object view from content layout
     */
-    fun show(context: Context, title: String, contentLayout: Int, process: (contentLayout: View?) -> Unit) 
+    fun show(context: Context, title: String, contentLayout: Int, process: (contentLayout: View?) -> Unit)
+    fun show(context: Context, title: String?, contentLayout: Int, headerLayout: Int,
+         process: (contentLayout: View?, headerLayout: View?) -> Unit) 
 ```
 Here is example code
 

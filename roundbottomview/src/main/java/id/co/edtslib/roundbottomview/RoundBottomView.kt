@@ -117,7 +117,7 @@ class RoundBottomView(context: Context, theme: Int): Dialog(context, theme) {
 
             if (headerLayout != null) {
                 clContent.removeView(llTitle)
-                clContent.addView(headerLayout)
+                clContent.addView(headerLayout, 0)
             }
 
             val flContent = findViewById<FrameLayout>(R.id.flContent)
